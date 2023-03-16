@@ -34,14 +34,14 @@ const defaults = {
 
   func: { // function names to parse
     list: ['i18next.t', 'i18n.t'],
-    extensions: ['.js', '.jsx']
+    extensions: ['.js', '.jsx', '.ts', '.tsx']
   },
 
   trans: { // Trans component (https://github.com/i18next/react-i18next)
     component: 'Trans',
     i18nKey: 'i18nKey',
     defaultsKey: 'defaults',
-    extensions: ['.js', '.jsx'],
+    extensions: ['.js', '.jsx', '.ts', '.tsx'],
     fallbackKey: false,
     supportBasicHtmlNodes: true, // Enables keeping the name of simple nodes (e.g. <br/>) in translations instead of indexed keys.
     keepBasicHtmlNodesFor: ['br', 'strong', 'i', 'p'], // Which nodes are allowed to be kept in translations during defaultValue generation of <Trans>.
@@ -76,7 +76,19 @@ const defaults = {
 
     // Normalize line endings to '\r\n', '\r', '\n', or 'auto' for the current operating system. Defaults to '\n'.
     // Aliases: 'CRLF', 'CR', 'LF', 'crlf', 'cr', 'lf'
-    lineEnding: '\n'
+    lineEnding: '\n',
+
+    // Whether to back up the original file before merging new translations into it.
+    autoBackup: true,
+    // Directory that need to backed up. Relative to current working directory.
+    backupSourcePath: 'i18n',
+    // Directory to store the backup file. Relative to current working directory.
+    backupPath: 'i18n-bk',
+
+    // Whether to generate a namespace map file
+    generateNamespaceMap: true,
+    // Path to the namespace map file
+    namespaceMapPath: 'src/generated/i18n-namespace.js',
   },
 
   keySeparator: '.', // char to separate keys
@@ -251,9 +263,9 @@ const getPluralSuffixes = (lng, pluralSeparator = '_') => {
 };
 
 /**
-* Creates a new parser
-* @constructor
-*/
+ * Creates a new parser
+ * @constructor
+ */
 class Parser {
   options = { ...defaults };
 
@@ -448,21 +460,21 @@ class Parser {
     // `\s` matches a single whitespace character, which includes spaces, tabs, form feeds, line feeds and other unicode spaces.
     const matchSpecialCharacters = '[\\r\\n\\s]*';
     const stringGroup =
-            matchSpecialCharacters + '(' +
-            // backtick (``)
-            '`(?:[^`\\\\]|\\\\(?:.|$))*`' +
-            '|' +
-            // double quotes ("")
-            '"(?:[^"\\\\]|\\\\(?:.|$))*"' +
-            '|' +
-            // single quote ('')
-            '\'(?:[^\'\\\\]|\\\\(?:.|$))*\'' +
-            ')' + matchSpecialCharacters;
+      matchSpecialCharacters + '(' +
+      // backtick (``)
+      '`(?:[^`\\\\]|\\\\(?:.|$))*`' +
+      '|' +
+      // double quotes ("")
+      '"(?:[^"\\\\]|\\\\(?:.|$))*"' +
+      '|' +
+      // single quote ('')
+      '\'(?:[^\'\\\\]|\\\\(?:.|$))*\'' +
+      ')' + matchSpecialCharacters;
     const pattern = '(?:(?:^\\s*)|[^a-zA-Z0-9_])' +
-            '(?:' + matchFuncs + ')' +
-            '\\(' + stringGroup +
-            '(?:[\\,]' + stringGroup + ')?' +
-            '[\\,\\)]';
+      '(?:' + matchFuncs + ')' +
+      '\\(' + stringGroup +
+      '(?:[\\,]' + stringGroup + ')?' +
+      '[\\,\\)]';
     const re = new RegExp(pattern, 'gim');
 
     let r;
@@ -657,11 +669,11 @@ class Parser {
       }
 
       if (Object.prototype.hasOwnProperty.call(attr, 'ns')) {
-        if (typeof attr.ns !== 'string') {
-          this.log(`The ns attribute must be a string, saw ${chalk.yellow(attr.ns)}`);
-        }
-
         options.ns = attr.ns;
+      }
+
+      if (Object.prototype.hasOwnProperty.call(attr, 't')) {
+        options.t = attr.t;
       }
 
       if (customHandler) {

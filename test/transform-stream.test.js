@@ -105,7 +105,7 @@ test('[Key Based Fallback] defaultValue as string', done => {
 
 test('[Key Based Fallback] defaultValue as function', done => {
   const options = _.merge({}, defaults, {
-    defaultValue: function(lng, ns, key) {
+    defaultValue: function (lng, ns, key) {
       if (lng === 'en') {
         return key;
       }
@@ -161,7 +161,7 @@ test('[Trans Component] fallbackKey', done => {
     ],
     trans: {
       extensions: ['.js', '.jsx'], // with extensions
-      fallbackKey: function(ns, value) {
+      fallbackKey: function (ns, value) {
         return value;
       }
     },
@@ -188,9 +188,8 @@ test('[Trans Component] fallbackKey', done => {
           'html-encoded-tags': '< & >',
 
           // plural
-          "plural": "You have {{count}} apples",
-          "plural_plural": "You have {{count}} apples",
-
+          'plural': 'You have {{count}} apples',
+          'plural_plural': 'You have {{count}} apples',
 
           // context
           'context': 'A boyfriend',
@@ -199,22 +198,22 @@ test('[Trans Component] fallbackKey', done => {
           // i18nKey
           'multiline-text-string': 'multiline text string',
           'string-literal': 'This is a <strong>test</strong>',
-          "object-expression": "This is a <1>{{test}}</1>",
-          "arithmetic-expression": "2 + 2 = {{result}}",
+          'object-expression': 'This is a <1>{{test}}</1>',
+          'arithmetic-expression': '2 + 2 = {{result}}',
           'components': 'Go to <1>Administration > Tools</1> to download administrative tools.',
-          "lorem-ipsum": "<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.<p>Lorem Ipsum has been the industry's standard dummy text ever since the 1500s</p>",
-          "lorem-ipsum-nested": "Lorem Ipsum is simply dummy text of the printing and typesetting industry.<1>Lorem Ipsum is simply dummy text of the printing and typesetting industry.<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p></1><p>Lorem Ipsum has been the industry's standard dummy text ever since the 1500s</p>",
+          'lorem-ipsum': '<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.<p>Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s</p>',
+          'lorem-ipsum-nested': 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.<1>Lorem Ipsum is simply dummy text of the printing and typesetting industry.<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p></1><p>Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s</p>',
 
           // fallback key
           'Hello, World!': 'Hello, World!',
           'multiline text string': 'multiline text string',
-          "This is a <strong>test</strong>": "This is a <strong>test</strong>",
-          "This is a <1>{{test}}</1>": "This is a <1>{{test}}</1>",
-          "2 + 2 = {{result}}": "2 + 2 = {{result}}",
+          'This is a <strong>test</strong>': 'This is a <strong>test</strong>',
+          'This is a <1>{{test}}</1>': 'This is a <1>{{test}}</1>',
+          '2 + 2 = {{result}}': '2 + 2 = {{result}}',
           'Go to <1>Administration > Tools</1> to download administrative tools.': 'Go to <1>Administration > Tools</1> to download administrative tools.',
 
           '<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.<p>Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s</p>': '<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.<p>Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s</p>',
-          "Lorem Ipsum is simply dummy text of the printing and typesetting industry.<1>Lorem Ipsum is simply dummy text of the printing and typesetting industry.<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p></1><p>Lorem Ipsum has been the industry's standard dummy text ever since the 1500s</p>": "Lorem Ipsum is simply dummy text of the printing and typesetting industry.<1>Lorem Ipsum is simply dummy text of the printing and typesetting industry.<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p></1><p>Lorem Ipsum has been the industry's standard dummy text ever since the 1500s</p>",
+          'Lorem Ipsum is simply dummy text of the printing and typesetting industry.<1>Lorem Ipsum is simply dummy text of the printing and typesetting industry.<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p></1><p>Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s</p>': 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.<1>Lorem Ipsum is simply dummy text of the printing and typesetting industry.<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p></1><p>Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s</p>',
 
           // defaults
           'The component might be self-closing': 'The component might be self-closing',
@@ -261,11 +260,10 @@ test('Empty result', done => {
 });
 
 test('Custom transform', done => {
-  const options = _.merge({}, defaults, {
-  });
+  const options = _.merge({}, defaults, {});
 
   const expectedKey = 'CUSTOM TRANSFORM';
-  const customTransform = function(file, enc, done) {
+  const customTransform = function (outputText, file, enc, done) {
     this.parser.set(expectedKey);
     done();
   };
@@ -299,11 +297,10 @@ test('Custom transform', done => {
 });
 
 test('Custom flush', done => {
-  const options = _.merge({}, defaults, {
-  });
+  const options = _.merge({}, defaults, {});
 
   const expectedContents = 'CUSTOM FLUSH';
-  const customFlush = function(done) {
+  const customFlush = function (done) {
     this.push(new VirtualFile({
       path: 'virtual-path',
       contents: Buffer.from(expectedContents)
@@ -462,8 +459,7 @@ test('Remove old translation keys which are already removed from code', done => 
 });
 
 test('Escape sequences', done => {
-  const options = _.merge({}, defaults, {
-  });
+  const options = _.merge({}, defaults, {});
 
   gulp.src('test/fixtures/escape-sequences.js')
     .pipe(scanner(options))
@@ -700,10 +696,10 @@ test('resource.loadPath and resource.savePath configuration as functions', done 
   const options = _.merge({}, defaults, {
     removeUnusedKeys: true,
     resource: {
-      loadPath: function(lng, ns) {
+      loadPath: function (lng, ns) {
         return 'test/fixtures/i18n/' + lng + '/' + ns + '.json';
       },
-      savePath: function(lng, ns) {
+      savePath: function (lng, ns) {
         return 'i18n/' + lng + '/' + ns + '.json';
       }
     }

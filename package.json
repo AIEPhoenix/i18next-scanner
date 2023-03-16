@@ -1,18 +1,23 @@
 {
-  "name": "i18next-scanner",
-  "version": "4.1.2",
+  "name": "i18next-scanner-bl",
+  "version": "6.0.1",
   "description": "Scan your code, extract translation keys/values, and merge them into i18n resource files.",
-  "homepage": "https://github.com/i18next/i18next-scanner",
-  "author": "Cheton Wu <cheton@gmail.com>",
+  "homepage": "https://github.com/AIEPhoenix/i18next-scanner",
+  "author": "Brian Lee <aiephoenixbl@gmail.com>",
   "contributors": [
     {
       "name": "Cheton Wu",
       "email": "cheton@gmail.com",
       "url": "https://github.com/cheton"
+    },
+    {
+      "name": "Brian Lee",
+      "email": "aiephoenixbl@gmail.com",
+      "url": "https://github.com/AIEPhoenix"
     }
   ],
   "bin": {
-    "i18next-scanner": "./bin/cli.js"
+    "i18next-scanner-bl": "./bin/cli.js"
   },
   "main": "lib/index.js",
   "scripts": {
@@ -25,7 +30,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:i18next/i18next-scanner.git"
+    "url": "git@github.com:AIEPhoenix/i18next-scanner.git"
   },
   "license": "MIT",
   "engines": {
@@ -62,6 +67,7 @@
     "esprima-next": "^5.7.0",
     "gulp-sort": "^2.0.0",
     "i18next": "*",
+    "i18next-scanner-typescript": "^1.1.1",
     "lodash": "^4.0.0",
     "parse5": "^6.0.0",
     "sortobject": "^4.0.0",
@@ -81,10 +87,11 @@
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.3.0",
     "@trendmicro/babel-config": "^1.0.2",
+    "babel-preset-minify": "^0.5.2",
     "codecov": "^3.8.3",
     "core-js": "^3.23.1",
     "del-cli": "^4.0.1",
-    "eslint": "^8.18.0",
+    "eslint": "^8.36.0",
     "eslint-config-trendmicro": "^3.1.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-jest": "~26.5.3",

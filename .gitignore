@@ -5,3 +5,5 @@ yarn.lock
 /lib
 /output
 /coverage
+.idea
+.DS_Store

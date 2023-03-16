@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+const fs = require('fs');
 const path = require('path');
 const program = require('commander');
 const { ensureArray } = require('ensure-type');
@@ -69,7 +70,36 @@ try {
   }
 }
 
+const resourceConfig = config.options.resource;
+
+if (resourceConfig.autoBackup) {
+  const current = Date.now();
+  const timestamp = current.toString();
+  fs.cpSync(resourceConfig.backupSourcePath,
+    `${resourceConfig.backupPath}/${timestamp}`,
+    { recursive: true });
+  console.log(`old i18n files saved to ${resourceConfig.backupPath}/${timestamp}`);
+}
+
+if (resourceConfig.generateNamespaceMap) {
+  const ns = config.options.ns || [];
+  const mapContent = `const I18nNamespace = {\n${ns.map((n) => `  ${n}: "${n}"`).join(',\n')}\n}\n`;
+  const fileContent = `${mapContent}export default I18nNamespace;\n`;
+  const dirPath = path.dirname(resourceConfig.namespaceMapPath);
+  if (!fs.existsSync(dirPath)) {
+    fs.mkdirSync(dirPath, { recursive: true });
+  }
+  fs.writeFileSync(resourceConfig.namespaceMapPath, fileContent);
+  console.log(`new I18nNamespace map generated, saved to ${resourceConfig.namespaceMapPath}`);
+}
+
 vfs.src(config.input)
   .pipe(sort()) // Sort files in stream by path
   .pipe(scanner(config.options, config.transform, config.flush))
-  .pipe(vfs.dest(config.output));
+  .pipe(vfs.dest(config.output))
+  .on('end', () => {
+    console.log('new i18n files saved');
+  })
+  .on('error', (err) => {
+    console.error('i18next-scanner:', err);
+  });

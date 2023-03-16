@@ -1,6 +1,6 @@
-# i18next-scanner [![build status](https://travis-ci.org/i18next/i18next-scanner.svg?branch=master)](https://travis-ci.org/i18next/i18next-scanner) [![Coverage Status](https://coveralls.io/repos/i18next/i18next-scanner/badge.svg?branch=master&service=github)](https://coveralls.io/github/i18next/i18next-scanner?branch=master)
+# i18next-scanner-bl [![build status](https://travis-ci.org/i18next/i18next-scanner.svg?branch=master)](https://travis-ci.org/i18next/i18next-scanner) [![Coverage Status](https://coveralls.io/repos/i18next/i18next-scanner/badge.svg?branch=master&service=github)](https://coveralls.io/github/i18next/i18next-scanner?branch=master)
 
-[![NPM](https://nodei.co/npm/i18next-scanner.png?downloads=true&stars=true)](https://www.npmjs.com/package/i18next-scanner)
+[![NPM](https://nodei.co/npm/i18next-scanner-bl.png?downloads=true&stars=true)](https://www.npmjs.com/package/i18next-scanner-bl)
 
 Scan your code, extract translation keys/values, and merge them into i18n resource files.
 
@@ -40,6 +40,12 @@ There is a major breaking change since v1.0, and the API interface and options a
 Checkout [Migration Guide](https://github.com/i18next/i18next-scanner/wiki/Migration-Guide) while upgrading from earlier versions.
 
 ## Features
+* support typescript
+* auto back up existing resource files
+* generate namespace map object
+* auto recognize a lot i18n function usage
+* reinforced Trans component recognition
+
 * Fully compatible with [i18next](https://github.com/i18next/i18next) - a full-featured i18n javascript library for translating your webapplication.
 * Support [react-i18next](https://github.com/i18next/react-i18next) for parsing the <b>Trans</b> component
 * Support [Key Based Fallback](https://www.i18next.com/principles/fallback#key-fallback/) to write your code without the need to maintain i18n keys. This feature is available since [i18next@^2.1.0](https://github.com/i18next/i18next/blob/master/CHANGELOG.md#210)
@@ -157,7 +163,7 @@ module.exports = {
         metadata: {},
         allowDynamicKeys: false,
     },
-    transform: function customTransform(file, enc, done) {
+    transform: function customTransform(outputText, file, enc, done) {
         "use strict";
         const parser = this.parser;
         const content = fs.readFileSync(file.path, enc);
@@ -538,6 +544,11 @@ Below are the configuration options with their default values:
         savePath: 'i18n/{{lng}}/{{ns}}.json',
         jsonIndent: 2,
         lineEnding: '\n',
+        autoBackup: true,
+        backupSourcePath: 'i18n',
+        backupPath: 'i18n-bk',
+        generateNamespaceMap: true,
+        namespaceMapPath: 'src/generated/i18n-namespace.js',
     },
     nsSeparator: ':',
     keySeparator: '.',
@@ -730,7 +741,19 @@ Resource options:
 
         // Normalize line endings to '\r\n', '\r', '\n', or 'auto' for the current operating system. Defaults to '\n'.
         // Aliases: 'CRLF', 'CR', 'LF', 'crlf', 'cr', 'lf'
-        lineEnding: '\n'
+        lineEnding: '\n',
+        
+        // Whether to back up the original file before merging new translations into it.
+        autoBackup: true,
+        // Directory that need to backed up. Relative to current working directory.
+        backupSourcePath: 'i18n',
+        // Directory to store the backup file. Relative to current working directory.
+        backupPath: 'i18n-bk',
+
+        // Whether to generate a namespace map file
+        generateNamespaceMap: true,
+        // Path to the namespace map file
+        namespaceMapPath: 'src/generated/i18n-namespace.js',
     }
 }
 ```
@@ -863,7 +886,7 @@ This can be used to allow dynamic keys e.g. `friend${DynamicValue}`
 Example Usage:
 
 ```
-  transform: function customTransform(file, enc, done) {
+  transform: function customTransform(outputText, file, enc, done) {
     'use strict';
     const parser = this.parser;
 
