@@ -85,7 +85,6 @@ const transform = (parser, customTransform) => {
                   Object.assign({}, options, {
                     ns: namespace,
                     nsSeparator: false,
-                    keySeparator: false,
                   }),
                 );
                 processedKeys.push(key);
@@ -110,7 +109,6 @@ const transform = (parser, customTransform) => {
                     Object.assign({}, options, {
                       ns: namespace,
                       nsSeparator: false,
-                      keySeparator: false,
                     }),
                   );
                   processedKeys.push(key);
@@ -131,7 +129,6 @@ const transform = (parser, customTransform) => {
                       Object.assign({}, options, {
                         ns: namespace,
                         nsSeparator: false,
-                        keySeparator: false,
                       }),
                     );
                     processedKeys.push(key);
@@ -183,7 +180,6 @@ const transform = (parser, customTransform) => {
                     options,
                     {
                       nsSeparator: false,
-                      keySeparator: false,
                     },
                   ),
                 );
@@ -225,7 +221,6 @@ const transform = (parser, customTransform) => {
                   {
                     defaultValue: parserOptions.defaultValue,
                     nsSeparator: false,
-                    keySeparator: false,
                   },
                 ),
               );
